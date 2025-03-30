@@ -1,0 +1,80 @@
+version: "3.8"
+
+services:
+  notification_service:
+    build:
+      context: ./backend/notification_service
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_HOST=redis
+      - RABBITMQ_HOST=rabbitmq
+      - DB_HOST=postgres
+    depends_on:
+      - redis
+      - rabbitmq
+      - postgres
+
+  email_service:
+    build:
+      context: ./backend/email_service
+    ports:
+      - "5000:5000"
+    environment:
+      - SENDGRID_API_KEY=your_sendgrid_api_key
+    depends_on:
+      - redis
+      - rabbitmq
+
+  sms_service:
+    build:
+      context: ./backend/sms_service
+    ports:
+      - "5001:5001"
+    environment:
+      - TWILIO_ACCOUNT_SID=your_twilio_account_sid
+      - TWILIO_AUTH_TOKEN=your_twilio_auth_token
+    depends_on:
+      - redis
+      - rabbitmq
+
+  push_service:
+    build:
+      context: ./backend/push_service
+    ports:
+      - "5002:5002"
+    environment:
+      - FIREBASE_CREDENTIALS=path_to_your_firebase_credentials.json
+    depends_on:
+      - redis
+      - rabbitmq
+
+  websocket_service:
+    build:
+      context: ./backend/websocket_service
+    ports:
+      - "8001:8001"
+    depends_on:
+      - redis
+      - rabbitmq
+
+  redis:
+    image: redis:latest
+    container_name: redis
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: securepassword
+      POSTGRES_DB: notificationdb
+    ports:
+      - "5432:5432"

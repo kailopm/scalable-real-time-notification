@@ -1,0 +1,5 @@
+fastapi==0.95.0
+uvicorn==0.20.0
+aio_pika==8.2.1
+redis==4.3.4
+psycopg2-binary==2.9.3
