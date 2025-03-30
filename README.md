@@ -11,3 +11,5 @@ This project i'll create a `Scalable Real-Time Notification System` including va
 5. WebSocket server for real-time notification delivery.
 6. PostgreSQL for storing user preferences and history.
 7. Cloudflare CDN for caching API responses and static assets.
+
+::::
